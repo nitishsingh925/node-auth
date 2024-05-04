@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { signin, signup } from "../controllers/auth.controller.js";
 import { validation } from "../middlewares/validation-middleware.js";
-import { signupValidator } from "../validation/signup.validation.js";
-import { signinValidator } from "../validation/signin.vailidation.js";
+import {
+  signinValidator,
+  signupValidator,
+} from "../validation/auth.validation.js";
 
 const router = Router();
 

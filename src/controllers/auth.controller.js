@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import Response from "../utils/response.js";
+import { setAuthCookies } from "../utils/cookie.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "change_this_secret";
 const REFRESH_TOKEN_SECRET =
@@ -66,19 +67,7 @@ export const signin = async (req, res) => {
     });
 
     // Set cookies
-    res.cookie("accessToken", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-      maxAge: 1000 * 15, // 15 seconds
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    });
+    setAuthCookies(res, token, refreshToken);
 
     return Response.success(res, { userinfo }, "Signin successful", 200);
   } catch (error) {
@@ -100,12 +89,12 @@ export const refreshAccessToken = async (req, res) => {
       expiresIn: "15s",
     });
 
-    res.cookie("accessToken", newAccessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-      maxAge: 1000 * 15,
+    const newRefreshToken = jwt.sign({ id: payload.id }, REFRESH_TOKEN_SECRET, {
+      expiresIn: "7d",
     });
+
+    // Set cookies
+    setAuthCookies(res, newAccessToken, newRefreshToken);
 
     return Response.success(
       res,

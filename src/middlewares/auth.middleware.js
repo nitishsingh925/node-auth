@@ -1,11 +1,9 @@
 import jwt from "jsonwebtoken";
 import Response from "../utils/response.js";
 import { refreshAccessToken } from "../controllers/auth.controller.js";
-
-const JWT_SECRET = process.env.JWT_SECRET || "change_this_secret";
+import { ACCESS_TOKEN_SECRET } from "../utils/constants.js";
 
 export default function verifyToken(req, res, next) {
-  console.log("Verifying token...", req);
   try {
     const token =
       req.cookies?.accessToken ||
@@ -16,7 +14,7 @@ export default function verifyToken(req, res, next) {
 
     try {
       // Verify access token
-      const payload = jwt.verify(token, JWT_SECRET);
+      const payload = jwt.verify(token, ACCESS_TOKEN_SECRET);
       req.user = payload;
       return next();
     } catch (err) {

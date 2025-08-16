@@ -1,9 +1,5 @@
 import { Router } from "express";
-import {
-  refreshAccessToken,
-  signin,
-  signup,
-} from "../controllers/auth.controller.js";
+import { logout, signin, signup } from "../controllers/auth.controller.js";
 import { validation } from "../middlewares/validation-middleware.js";
 import verifyToken from "../middlewares/auth.middleware.js";
 import {
@@ -16,6 +12,7 @@ const router = Router();
 
 router.post("/signup", validation(signupValidator), signup);
 router.post("/signin", validation(signinValidator), signin);
+router.post("/logout", logout);
 
 // public route (no auth)
 router.get("/public", (_, res) => {

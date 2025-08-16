@@ -1,17 +1,38 @@
-export const setAuthCookies = (res, accessToken, refreshToken) => {
+import { COOKIE_OPTIONS } from "./constants.js";
+
+export const setAuthCookies = (
+  res,
+  accessToken = null,
+  refreshToken = null
+) => {
+  if (accessToken === null && refreshToken === null) {
+    // Logout scenario: clear cookies
+    res.clearCookie("accessToken", {
+      httpOnly: COOKIE_OPTIONS.httpOnly,
+      secure: COOKIE_OPTIONS.secure,
+      sameSite: COOKIE_OPTIONS.sameSite,
+    });
+    res.clearCookie("refreshToken", {
+      httpOnly: COOKIE_OPTIONS.httpOnly,
+      secure: COOKIE_OPTIONS.secure,
+      sameSite: COOKIE_OPTIONS.sameSite,
+    });
+    return;
+  }
+
   // Access token cookie
   res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "Strict", // or 'None' if cross-domain
-    maxAge: 1000 * 15, // 15 seconds
+    httpOnly: COOKIE_OPTIONS.httpOnly,
+    secure: COOKIE_OPTIONS.secure,
+    sameSite: COOKIE_OPTIONS.sameSite,
+    maxAge: COOKIE_OPTIONS.accessTokenTime,
   });
 
   // Refresh token cookie
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "Strict", // or 'None' if cross-domain
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    httpOnly: COOKIE_OPTIONS.httpOnly,
+    secure: COOKIE_OPTIONS.secure,
+    sameSite: COOKIE_OPTIONS.sameSite,
+    maxAge: COOKIE_OPTIONS.refreshTokenTime,
   });
 };

@@ -1,2 +1,9 @@
+# Node modules
 node_modules/
+
+# Environment variables
 .env
+
+# Lock files
+package-lock.json
+bun.lock

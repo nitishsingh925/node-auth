@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { ApiResponse } from "../utils/ApiResponse.js";
+import Response from "../utils/response.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "change_this_secret";
 
@@ -11,11 +11,7 @@ export default function verifyToken(req, res, next) {
       (req.headers.authorization || "").replace(/^Bearer\s+/i, "");
 
     if (!token) {
-      return res
-        .status(401)
-        .json(
-          new ApiResponse(401, null, "Authentication token required", false)
-        );
+      return Response.error(res, "Authentication token required", 401);
     }
 
     const payload = jwt.verify(token, JWT_SECRET);
@@ -23,8 +19,6 @@ export default function verifyToken(req, res, next) {
     req.user = payload;
     next();
   } catch (err) {
-    return res
-      .status(401)
-      .json(new ApiResponse(401, null, "Invalid or expired token", false));
+    return Response.error(res, "Invalid or expired token", 401);
   }
 }

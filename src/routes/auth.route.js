@@ -6,6 +6,7 @@ import {
   signinValidator,
   signupValidator,
 } from "../validation/auth.validation.js";
+import Response from "../utils/response.js";
 
 const router = Router();
 
@@ -13,13 +14,17 @@ router.post("/signup", validation(signupValidator), signup);
 router.post("/signin", validation(signinValidator), signin);
 
 // public route (no auth)
-router.get("/public", (req, res) => {
-  return res.status(200).json("Public route access granted");
+router.get("/public", (_, res) => {
+  return Response.success(res, null, "Public route access granted");
 });
 
 // protected route (auth required)
 router.get("/protected", verifyToken, (req, res) => {
   // req.user set by verifyToken
-  return res.status(200).json("Protected route access granted");
+  return Response.success(
+    res,
+    { user: req.user },
+    "Protected route access granted"
+  );
 });
 export default router;

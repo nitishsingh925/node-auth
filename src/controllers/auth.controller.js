@@ -86,7 +86,7 @@ export const refreshAccessToken = async (req, res) => {
   const refreshToken = req.cookies?.refreshToken;
 
   if (!refreshToken) {
-    return Response.error(res, "Refresh token required", 401);
+    return Response.error(res, "Authentication failed", 401);
   }
 
   try {

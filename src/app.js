@@ -9,6 +9,11 @@ app.use(cookieParser());
 
 app.use("/api/v1/auth", authRouter);
 
+// Root route
+app.get("/", (_, res) => {
+  response.success(res, null, "Welcome to the API");
+});
+
 // Fallback route
 app.use((_, res) => {
   response.notFound(res);

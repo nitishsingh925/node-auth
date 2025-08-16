@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { signin, signup } from "../controllers/auth.controller.js";
+import {
+  refreshAccessToken,
+  signin,
+  signup,
+} from "../controllers/auth.controller.js";
 import { validation } from "../middlewares/validation-middleware.js";
 import verifyToken from "../middlewares/auth.middleware.js";
 import {
